@@ -6,6 +6,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+# package.json declares the few prod deps; lockfile included for traceability,
+# but --no-frozen-lockfile is used because this image installs a single-app
+# subset, not the workspace.
 COPY package.json ./
 RUN corepack enable && corepack prepare pnpm@9.7.0 --activate \
     && pnpm install --prod --no-frozen-lockfile
