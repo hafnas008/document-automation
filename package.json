@@ -1,0 +1,19 @@
+{
+  "name": "documentation-ai",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "dev:render": "pnpm --filter doc-render dev",
+    "build": "pnpm --filter web build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
+  },
+  "packageManager": "pnpm@9.7.0",
+  "engines": { "node": ">=20" }
+}
