@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { audit } from '@/lib/audit';
 
 export async function POST(req: Request, { params }: { params: { id: string } }) {
   const supa = supabaseServer();
@@ -42,6 +43,13 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     const { error: cErr } = await admin.from('costing_items').insert(copies);
     if (cErr) return NextResponse.json({ error: cErr.message }, { status: 500 });
   }
+
+  await audit(admin, {
+    tenant_id: orig.tenant_id, user_id: user.id,
+    action: 'create', entity_type: 'costing_sheet',
+    entity_id: next.id,
+    diff: { duplicated_from: orig.id, version: orig.version + 1 },
+  });
 
   return NextResponse.redirect(new URL(`/costing/${next.id}`, req.url), { status: 303 });
 }

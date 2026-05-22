@@ -6,6 +6,7 @@ import { supabaseServer } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { fillCostingXlsx } from '@/lib/xlsx-fill';
 import { xlsxToPdf } from '@/lib/vps-render';
+import { audit } from '@/lib/audit';
 
 const TEMPLATE_PATH = path.join(process.cwd(), 'templates', 'common-costing.xlsx');
 
@@ -85,6 +86,13 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     xlsx_url: xlsxSigned!.signedUrl,
     pdf_url: pdfSigned!.signedUrl,
   }).eq('id', sheet.id);
+
+  await audit(admin, {
+    tenant_id: tenant.id, user_id: user.id,
+    action: 'generate', entity_type: 'costing_sheet',
+    entity_id: sheet.id,
+    diff: { version: sheet.version, status: 'final' },
+  });
 
   return NextResponse.redirect(new URL(`/costing/${sheet.id}`, req.url), { status: 303 });
 }

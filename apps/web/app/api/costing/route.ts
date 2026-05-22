@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { audit } from '@/lib/audit';
 
 export async function POST(req: Request) {
   const supa = supabaseServer();
@@ -24,6 +25,12 @@ export async function POST(req: Request) {
     })
     .select('id').single();
   if (error || !sheet) return NextResponse.json({ error: error?.message ?? 'failed' }, { status: 500 });
+
+  await audit(supa, {
+    tenant_id: m.tenant_id, user_id: user.id,
+    action: 'create', entity_type: 'costing_sheet',
+    entity_id: sheet.id,
+  });
 
   // form POST -> redirect to editor
   return NextResponse.redirect(new URL(`/costing/${sheet.id}`, req.url), { status: 303 });

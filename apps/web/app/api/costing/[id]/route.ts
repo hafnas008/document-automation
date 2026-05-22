@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { supabaseServer } from '@/lib/supabase/server';
 import { computeTotals } from '@/lib/formulas';
 import { normalizeItemText } from '@/lib/normalize';
+import { audit } from '@/lib/audit';
 
 const ItemSchema = z.object({
   id: z.string().uuid(),
@@ -70,6 +71,17 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
       total,
     }).eq('id', it.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  // Get tenant_id for the audit log
+  const tenantId = (await supa.from('costing_sheets').select('tenant_id').eq('id', params.id).single()).data?.tenant_id;
+  if (tenantId) {
+    await audit(supa, {
+      tenant_id: tenantId, user_id: user.id,
+      action: 'update', entity_type: 'costing_sheet',
+      entity_id: params.id,
+      diff: { title: body.title, items_count: body.items.length },
+    });
   }
 
   return NextResponse.json({ ok: true, totals });
