@@ -26,3 +26,22 @@ describe('POST /xlsx-to-pdf auth', () => {
     expect(r.status).toBe(401);
   });
 });
+
+describe('POST /xlsx-to-pdf body validation', () => {
+  it('400 on empty body', async () => {
+    const r = await request(app)
+      .post('/xlsx-to-pdf')
+      .set('x-render-secret', SECRET)
+      .send(Buffer.alloc(0));
+    expect(r.status).toBe(400);
+  });
+
+  it('500 when libreoffice fails', async () => {
+    const r = await request(app)
+      .post('/xlsx-to-pdf')
+      .set('x-render-secret', SECRET)
+      .set('content-type', 'application/octet-stream')
+      .send(Buffer.from('not-really-xlsx'));
+    expect(r.status).toBe(500);
+  });
+});
