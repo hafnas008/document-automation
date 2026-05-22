@@ -16,3 +16,13 @@ pnpm dev:render   # converter on :3017
 ```
 
 See `docs/DEPLOYMENT.md` for production setup.
+
+## RLS smoke test
+
+After applying migrations to a Supabase project (cloud or local), run:
+
+```
+psql "$DATABASE_URL" -f supabase/tests/rls_smoke.sql
+```
+
+Should print `NOTICE: RLS smoke OK`. Any other output is a leak.
