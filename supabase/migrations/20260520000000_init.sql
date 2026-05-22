@@ -42,9 +42,12 @@ CREATE TRIGGER trg_tenant_users_updated_at BEFORE UPDATE ON tenant_users
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- Helper: resolve current user's tenant_id (used in RLS policies)
-CREATE OR REPLACE FUNCTION current_tenant_id() RETURNS uuid AS $$
+CREATE OR REPLACE FUNCTION current_tenant_id() RETURNS uuid
+  LANGUAGE sql STABLE SECURITY DEFINER
+  SET search_path = public, auth, pg_temp
+AS $$
   SELECT tenant_id FROM tenant_users WHERE user_id = auth.uid() LIMIT 1
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
+$$;
 
 -- 3. clients ----------------------------------------------------------------
 CREATE TABLE clients (
