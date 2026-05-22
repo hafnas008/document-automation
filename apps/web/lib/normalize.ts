@@ -1,3 +1,4 @@
+// Server-only. Uses node:crypto. Do not import from edge runtimes or client components.
 import { createHash } from 'node:crypto';
 
 export function normalizeItemText(s: string): string {

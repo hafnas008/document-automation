@@ -15,6 +15,9 @@ describe('normalizeItemText', () => {
     expect(normalizeItemText('')).toBe('');
     expect(normalizeItemText('   ')).toBe('');
   });
+  it('preserves letters from non-Latin scripts (Arabic, future EN/AR)', () => {
+    expect(normalizeItemText('جبس Ceiling, 12mm!')).toBe('جبس ceiling 12mm');
+  });
 });
 
 describe('cacheKey', () => {
