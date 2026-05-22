@@ -27,6 +27,29 @@ CREATE POLICY "logo upload" ON storage.objects FOR INSERT
 CREATE POLICY "logo read" ON storage.objects FOR SELECT
   USING (bucket_id = 'tenant-logos');
 
+CREATE POLICY "logo update" ON storage.objects FOR UPDATE
+  USING (
+    bucket_id = 'tenant-logos'
+    AND auth.role() = 'authenticated'
+    AND (storage.foldername(name))[1] = current_tenant_id()::text
+  )
+  WITH CHECK (
+    bucket_id = 'tenant-logos'
+    AND auth.role() = 'authenticated'
+    AND (storage.foldername(name))[1] = current_tenant_id()::text
+  );
+
+CREATE POLICY "logo delete" ON storage.objects FOR DELETE
+  USING (
+    bucket_id = 'tenant-logos'
+    AND auth.role() = 'authenticated'
+    AND (storage.foldername(name))[1] = current_tenant_id()::text
+  );
+
+-- NOTE: generated-docs writes are performed server-side using the service_role key
+-- (see apps/web/lib/supabase/admin.ts). service_role bypasses RLS, so no
+-- INSERT/UPDATE/DELETE policies are needed here. SELECT policy below scopes
+-- end-user reads to their own tenant folder.
 CREATE POLICY "generated read own" ON storage.objects FOR SELECT
   USING (
     bucket_id = 'generated-docs'
