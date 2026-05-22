@@ -105,7 +105,8 @@ CREATE TABLE costing_sheets (
   created_by        uuid REFERENCES auth.users(id),
   created_at        timestamptz NOT NULL DEFAULT now(),
   updated_at        timestamptz NOT NULL DEFAULT now(),
-  CHECK (status IN ('draft','final'))
+  CHECK (status IN ('draft','final')),
+  UNIQUE (tenant_id, sheet_number, version)
 );
 CREATE INDEX idx_costing_sheets_tenant ON costing_sheets(tenant_id) WHERE deleted_at IS NULL;
 CREATE INDEX idx_costing_sheets_project ON costing_sheets(project_id);
