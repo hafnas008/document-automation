@@ -1,0 +1,21 @@
+services:
+  doc-render:
+    build: .
+    container_name: doc-render
+    restart: unless-stopped
+    environment:
+      DOC_RENDER_PORT: 3017
+      DOC_RENDER_SECRET: ${DOC_RENDER_SECRET}
+    expose:
+      - "3017"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.doc-render.rule=Host(`doc-render.srv1279727.hstgr.cloud`)"
+      - "traefik.http.routers.doc-render.entrypoints=websecure"
+      - "traefik.http.routers.doc-render.tls.certresolver=le"
+      - "traefik.http.services.doc-render.loadbalancer.server.port=3017"
+    networks:
+      - traefik
+networks:
+  traefik:
+    external: true
