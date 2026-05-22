@@ -10,3 +10,4 @@ dist/
 coverage/
 .vercel/
 .pnpm-store/
+*.tsbuildinfo
