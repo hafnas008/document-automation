@@ -4,7 +4,7 @@
 // apps/web/templates/README.md — do not drift from it.
 
 import XlsxPopulate from 'xlsx-populate';
-import { computeTotals, type Section } from './formulas';
+import { computeTotals, itemTotal, type Section } from './formulas';
 
 export interface FillInput {
   tenant: {
@@ -35,7 +35,14 @@ export interface FillInput {
 
 function setNamedIfPresent(wb: any, name: string, value: unknown) {
   const cell = wb.definedName(name);
-  if (cell) cell.value(value ?? '');
+  if (!cell) return;
+  // Only text-like nulls fall back to empty string; preserve numbers/dates/booleans as-is
+  // so numeric fields don't silently become text and break downstream Excel formulas.
+  if (value === null || value === undefined) {
+    cell.value('');
+  } else {
+    cell.value(value);
+  }
 }
 
 export async function fillCostingXlsx(templateBuffer: Buffer, input: FillInput): Promise<Buffer> {
@@ -79,9 +86,12 @@ export async function fillCostingXlsx(templateBuffer: Buffer, input: FillInput):
       sheet.row(r).cell(startCol + 2).value(it.qty);
       sheet.row(r).cell(startCol + 3).value(it.unit ?? '');
       sheet.row(r).cell(startCol + 4).value(it.unit_rate);
-      const effRate = it.section === 'Labour' && it.labour_rate != null
-        ? it.unit_rate + it.labour_rate : it.unit_rate;
-      sheet.row(r).cell(startCol + 5).value(it.qty * effRate);
+      sheet.row(r).cell(startCol + 5).value(itemTotal({
+        section: it.section,
+        qty: it.qty,
+        unit_rate: it.unit_rate,
+        labour_rate: it.labour_rate,
+      }));
     });
   }
 

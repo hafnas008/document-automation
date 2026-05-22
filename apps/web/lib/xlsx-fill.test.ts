@@ -96,4 +96,20 @@ describe('fillCostingXlsx', () => {
     const wb = await XlsxPopulate.fromDataAsync(out);
     expect(wb.definedName('CLIENT_NAME')?.value()).toBe('—');
   });
+
+  it('per-row total cell uses itemTotal() and is rounded', async () => {
+    const out = await fillCostingXlsx(template, {
+      ...sampleInput,
+      items: [
+        // 3 * 3.333 = 9.999 → round2 → 10.00
+        { section: 'Material', description: 'Rounding probe', qty: 3, unit: 'nos', unit_rate: 3.333, labour_rate: null },
+      ],
+    });
+    const wb = await XlsxPopulate.fromDataAsync(out);
+    const anchor = wb.definedName('ITEMS_START');
+    const sheet = anchor!.sheet();
+    const row = anchor!.rowNumber();
+    const col = anchor!.columnNumber();
+    expect(sheet.row(row).cell(col + 5).value()).toBe(10);
+  });
 });
