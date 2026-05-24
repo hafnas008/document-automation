@@ -12,3 +12,5 @@ coverage/
 .vercel/
 .pnpm-store/
 *.tsbuildinfo
+
+.vercel
