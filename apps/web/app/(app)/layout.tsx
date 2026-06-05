@@ -1,7 +1,8 @@
 import { supabaseServer } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { BottomNav } from '@/components/shell/BottomNav';
-import { Atmosphere } from '@/components/shell/Atmosphere';
+import { PageFlow } from '@/components/shell/PageFlow';
+import { PageEnter } from '@/components/shell/PageEnter';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supa = supabaseServer();
@@ -10,8 +11,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="relative min-h-screen">
-      <Atmosphere />
-      <div className="mx-auto min-h-screen max-w-xl pb-28">
+      <PageEnter />
+      <PageFlow />
+      <div className="relative z-[2] mx-auto min-h-screen max-w-xl pb-28">
         {children}
       </div>
       <BottomNav />

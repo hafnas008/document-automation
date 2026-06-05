@@ -26,12 +26,12 @@ export default async function HomePage() {
       <div className="mb-2 flex items-center justify-between px-5">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-breathe rounded-full bg-caramel-500" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-caramel-500" />
+            <span className="absolute inline-flex h-full w-full animate-breathe rounded-full bg-mist-300" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-mist-200" />
           </span>
-          <span className="label text-brown-500">System online</span>
+          <span className="label text-ash-400">System online</span>
         </div>
-        <span className="label text-brown-400">{company}</span>
+        <span className="label text-ash-500">{company}</span>
       </div>
 
       {/* smart command hero */}
@@ -40,8 +40,8 @@ export default async function HomePage() {
       {/* module menu */}
       <section className="mt-7 px-4">
         <div className="mb-3 flex items-end justify-between px-1">
-          <h2 className="label text-brown-500">Documents</h2>
-          <span className="label text-brown-400">04 modules</span>
+          <h2 className="label text-ash-400">Documents</h2>
+          <span className="label text-ash-500">03 modules</span>
         </div>
         <div className="flex flex-col gap-3">
           <ModuleCard index={0} href="/costing" label="Costing" desc="Estimate from a photo, voice note or sheet" icon={<CostingIcon />} status="ready" />

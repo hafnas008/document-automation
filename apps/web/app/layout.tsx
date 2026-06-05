@@ -1,23 +1,16 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Hanken_Grotesk, IBM_Plex_Mono } from 'next/font/google';
+import { Manrope, JetBrains_Mono } from 'next/font/google';
 
-const display = Fraunces({
+const sans = Manrope({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-display',
-  display: 'swap',
-});
-const sans = Hanken_Grotesk({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800'],
   variable: '--font-sans',
   display: 'swap',
 });
-const mono = IBM_Plex_Mono({
+const mono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['300', '400', '500'],
   variable: '--font-mono',
   display: 'swap',
 });
@@ -27,11 +20,11 @@ export const metadata: Metadata = {
   description: 'A smart documentation assistant for engineering & contracting companies',
   manifest: '/manifest.webmanifest',
   icons: { icon: '/icon.svg', apple: '/icon.svg' },
-  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Documentation' },
+  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Documentation' },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#3A291E',
+  themeColor: '#0C0C0E',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -40,7 +33,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

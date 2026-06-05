@@ -3,60 +3,70 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --grid-color: rgba(255, 255, 255, 0.035);
 }
 
-body {
-  @apply bg-beige-200 text-brown-900 antialiased;
+html, body {
+  background-color: #0c0c0e;
+  color: #f1f1f3;
   font-family: var(--font-sans), ui-sans-serif, system-ui;
+  letter-spacing: 0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
-/* Thin "blueprint" ruled hairline */
-.rule { @apply border-t border-beige-400/70; }
+::selection { background: #cfd0d4; color: #0c0c0e; }
 
-/* Engineering numeric / label readout */
+/* Cinematic grain + vignette (Zaha-inspired) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(120% 80% at 50% 40%, transparent 50%, rgba(0,0,0,0.6) 100%);
+}
+
+/* Utilities */
+.label { @apply font-mono text-[11px] uppercase tracking-[0.22em] text-ash-400; }
 .num { @apply font-mono tabular-nums; }
-.label {
-  @apply font-mono text-[11px] uppercase tracking-[0.22em] text-brown-400;
+.rule { background: linear-gradient(90deg, transparent, rgba(241,241,243,0.14), transparent); height: 1px; }
+
+.tech-grid {
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 56px 56px;
 }
 
-/* Surfaces */
 .card {
-  @apply rounded-xl2 border border-beige-400/70 bg-beige-50 shadow-tile;
+  @apply rounded-xl2 border border-white/[0.07] bg-graphite-800/80 shadow-tile backdrop-blur-md;
 }
-.glass {
-  @apply rounded-xl2 border border-beige-50/60 bg-beige-50/70 shadow-tile backdrop-blur-md;
-}
-
-/* Buttons */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-brown-700 px-5 py-3
-         font-medium text-beige-50 shadow-tile transition active:scale-[0.98]
-         hover:bg-brown-800 disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-mist-100 px-5 py-3
+         font-semibold text-graphite-900 shadow-tile transition active:scale-[0.98]
+         hover:bg-white disabled:opacity-50;
 }
 .btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 rounded-2xl border border-beige-400
-         bg-beige-50/70 px-4 py-2.5 font-medium text-brown-700 transition active:scale-[0.98]
-         hover:bg-beige-100;
+  @apply inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10
+         bg-white/[0.04] px-4 py-2.5 font-medium text-mist-200 transition active:scale-[0.98]
+         hover:bg-white/[0.08];
 }
 
-/* Atmospheric background layers (used by <Atmosphere/>) */
-.bg-base {
-  background:
-    radial-gradient(70% 55% at 82% -8%, rgba(169,116,79,0.26), transparent 60%),
-    radial-gradient(60% 50% at -10% 110%, rgba(115,86,57,0.18), transparent 60%),
-    linear-gradient(165deg, #F4ECDD 0%, #ECE0C9 52%, #E2D2B4 100%);
-}
-.bg-grid {
-  background-image:
-    linear-gradient(to right, rgba(71,50,38,0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(71,50,38,0.05) 1px, transparent 1px);
-  background-size: 26px 26px;
-  -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 80%);
-          mask-image: radial-gradient(120% 90% at 50% 0%, #000 35%, transparent 80%);
-}
-.bg-grain {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
-}
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(20px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+.reveal.in { opacity: 1; transform: translateY(0); }

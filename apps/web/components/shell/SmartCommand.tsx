@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { MagneticButton } from './MagneticButton';
 import { PencilIcon, MicIcon, CameraIcon, SparkIcon, SendIcon } from './icons';
 
 type Mode = 'type' | 'speak' | 'snap';
@@ -14,8 +15,7 @@ const MODES: { key: Mode; label: string; Icon: typeof PencilIcon }[] = [
 ];
 
 const SUGGESTIONS = ['Kitchen cabinets', 'Wardrobe costing', 'Site measurement', 'Client quotation'];
-
-const ease = [0.22, 1, 0.36, 1] as const;
+const ease = [0.16, 1, 0.3, 1] as const;
 
 export function SmartCommand() {
   const router = useRouter();
@@ -29,41 +29,40 @@ export function SmartCommand() {
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease }}
-      className="relative mx-4 mt-2 overflow-hidden rounded-[1.8rem] border border-brown-700/40 bg-gradient-to-b from-brown-700 to-brown-900 p-5 text-beige-50 shadow-lift"
+      transition={{ duration: 0.6, ease, delay: 0.05 }}
+      className="relative mx-4 mt-2 overflow-hidden rounded-[1.8rem] border border-white/10 bg-graphite-850/80 p-5 shadow-lift backdrop-blur-xl"
     >
-      {/* glow */}
-      <div className="pointer-events-none absolute -right-10 -top-16 h-44 w-44 rounded-full bg-caramel-500/30 blur-3xl" />
-      <div className="pointer-events-none absolute inset-0 bg-grain opacity-[0.06]" />
+      <div className="pointer-events-none absolute -right-12 -top-16 h-44 w-44 rounded-full bg-mist-300/10 blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-mist-300/40 to-transparent" />
 
       <div className="relative">
-        <div className="flex items-center gap-2 text-caramel-300">
+        <div className="flex items-center gap-2 text-mist-300">
           <SparkIcon className="h-4 w-4" />
-          <span className="label text-caramel-300">AI Document Assistant</span>
+          <span className="label text-mist-300">AI Document Assistant</span>
         </div>
 
-        <h1 className="mt-3 font-display text-[26px] font-medium leading-[1.15] tracking-tight">
+        <h1 className="mt-3 font-display text-[27px] font-bold leading-[1.12] tracking-tight text-mist-100">
           What are we
           <br />
-          <span className="italic text-caramel-300">documenting</span> today?
+          documenting <span className="text-ash-400">today?</span>
         </h1>
 
         {/* input */}
-        <div className="mt-5 flex items-center gap-2 rounded-2xl border border-beige-50/15 bg-beige-50/10 p-1.5 pl-4 backdrop-blur">
+        <div className="mt-5 flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] p-1.5 pl-4">
           <input
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && go()}
             placeholder="Describe a job, dimensions, or client…"
-            className="min-w-0 flex-1 bg-transparent py-2.5 text-sm text-beige-50 placeholder:text-beige-200/50 focus:outline-none"
+            className="min-w-0 flex-1 bg-transparent py-2.5 text-sm text-mist-100 placeholder:text-ash-500 focus:outline-none"
           />
-          <button
+          <MagneticButton
+            ariaLabel="Start"
             onClick={go}
-            aria-label="Start"
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-caramel-500 text-brown-900 transition active:scale-95 hover:bg-caramel-400"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-mist-100 text-graphite-900 transition hover:bg-white"
           >
             <SendIcon className="h-5 w-5" strokeWidth={2} />
-          </button>
+          </MagneticButton>
         </div>
 
         {/* mode toggle */}
@@ -73,18 +72,18 @@ export function SmartCommand() {
             return (
               <button
                 key={key}
-                onClick={() => { setMode(key); }}
+                onClick={() => setMode(key)}
                 className={[
                   'flex items-center justify-center gap-2 rounded-xl border py-2.5 text-sm font-medium transition active:scale-[0.98]',
                   active
-                    ? 'border-caramel-400/60 bg-beige-50/15 text-beige-50'
-                    : 'border-beige-50/10 bg-transparent text-beige-200/70 hover:bg-beige-50/5',
+                    ? 'border-white/20 bg-white/10 text-mist-100'
+                    : 'border-white/[0.06] text-ash-400 hover:bg-white/[0.04]',
                 ].join(' ')}
               >
                 <span className="relative">
                   <Icon className="h-4 w-4" />
                   {active && key === 'speak' && (
-                    <span className="absolute -right-1 -top-1 h-1.5 w-1.5 animate-breathe rounded-full bg-caramel-300" />
+                    <span className="absolute -right-1 -top-1 h-1.5 w-1.5 animate-breathe rounded-full bg-mist-300" />
                   )}
                 </span>
                 {label}
@@ -102,7 +101,7 @@ export function SmartCommand() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 + i * 0.06, duration: 0.3, ease }}
               onClick={go}
-              className="rounded-full border border-beige-50/15 bg-beige-50/5 px-3 py-1.5 text-xs text-beige-100/80 transition hover:border-caramel-400/50 hover:text-beige-50"
+              className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-ash-300 transition hover:border-mist-300/40 hover:text-mist-100"
             >
               {s}
             </motion.button>
