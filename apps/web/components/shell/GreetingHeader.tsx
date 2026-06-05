@@ -7,9 +7,9 @@ export function GreetingHeader({ company }: { company: string }) {
     <header className="px-5 pt-8">
       {/* brand bar */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.png" alt="Documentation Studio" className="h-11 w-11 rounded-2xl" />
+          <img src="/logo.png" alt="Documentation Studio" className="h-14 w-14 rounded-[1.1rem] shadow-tile" />
           <span className="label">Documentation Studio</span>
         </div>
         <Link
