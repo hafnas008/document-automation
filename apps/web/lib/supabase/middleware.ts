@@ -24,7 +24,13 @@ export async function updateSession(request: NextRequest) {
   const path = url.pathname;
   const isAuthPage = path === '/login';
   const isApi = path.startsWith('/api/');
-  const isPublic = isAuthPage || path === '/' || path.startsWith('/_next') || path.startsWith('/favicon');
+  const isPublic =
+    isAuthPage ||
+    path === '/' ||
+    path.startsWith('/_next') ||
+    path.startsWith('/favicon') ||
+    path === '/manifest.webmanifest' ||
+    path === '/icon.svg';
 
   // Easy-access mode: no login screen — bounce anonymous hits to auto-login.
   if (!user && !isPublic && !isApi) {
