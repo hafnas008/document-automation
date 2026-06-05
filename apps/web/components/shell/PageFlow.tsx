@@ -59,11 +59,11 @@ export function PageFlow() {
       {/* ambient halos */}
       <div
         className="absolute left-1/2 top-[-18%] h-[1100px] w-[1100px] -translate-x-1/2"
-        style={{ background: 'radial-gradient(closest-side, rgba(207,208,212,0.10), rgba(207,208,212,0.03) 40%, transparent 75%)' }}
+        style={{ background: 'radial-gradient(closest-side, rgba(24,24,27,0.05), rgba(24,24,27,0.015) 40%, transparent 75%)' }}
       />
       <div
         className="absolute left-[-12%] top-[58%] h-[900px] w-[900px]"
-        style={{ background: 'radial-gradient(closest-side, rgba(207,208,212,0.06), transparent 70%)' }}
+        style={{ background: 'radial-gradient(closest-side, rgba(24,24,27,0.035), transparent 70%)' }}
       />
       <motion.svg
         viewBox="0 0 1440 2000"
@@ -73,10 +73,10 @@ export function PageFlow() {
       >
         <defs>
           <linearGradient id="pf-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#CFD0D4" stopOpacity="0" />
-            <stop offset="25%" stopColor="#CFD0D4" stopOpacity="0.5" />
-            <stop offset="75%" stopColor="#CFD0D4" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#CFD0D4" stopOpacity="0" />
+            <stop offset="0%" stopColor="#8E8E96" stopOpacity="0" />
+            <stop offset="25%" stopColor="#8E8E96" stopOpacity="0.45" />
+            <stop offset="75%" stopColor="#8E8E96" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#8E8E96" stopOpacity="0" />
           </linearGradient>
         </defs>
         <g fill="none" stroke="url(#pf-grad)" strokeLinecap="round">

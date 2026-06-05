@@ -20,11 +20,11 @@ export const metadata: Metadata = {
   description: 'A smart documentation assistant for engineering & contracting companies',
   manifest: '/manifest.webmanifest',
   icons: { icon: '/icon.svg', apple: '/icon.svg' },
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'Documentation' },
+  appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Documentation' },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0C0C0E',
+  themeColor: '#ECECEE',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,

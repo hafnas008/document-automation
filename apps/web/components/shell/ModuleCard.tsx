@@ -32,20 +32,20 @@ export function ModuleCard({
       whileHover={ready ? { y: -3 } : undefined}
       whileTap={ready ? { scale: 0.985 } : undefined}
       className={[
-        'group relative flex items-center gap-4 overflow-hidden rounded-xl2 border p-4 backdrop-blur-md transition',
+        'group relative flex items-center gap-4 overflow-hidden rounded-xl2 border p-4 transition',
         ready
-          ? 'border-white/[0.07] bg-graphite-800/70 shadow-tile hover:border-white/20 hover:bg-graphite-700/70 hover:shadow-lift'
-          : 'border-white/[0.05] bg-graphite-850/50',
+          ? 'border-black/[0.07] bg-graphite-800 shadow-tile hover:border-black/15 hover:shadow-lift'
+          : 'border-black/[0.05] bg-graphite-850',
       ].join(' ')}
     >
-      <span className="pointer-events-none absolute right-4 top-4 h-2 w-2 border-r border-t border-white/15" />
+      <span className="pointer-events-none absolute right-4 top-4 h-2 w-2 border-r border-t border-black/15" />
 
       <span
         className={[
           'grid h-14 w-14 shrink-0 place-items-center rounded-2xl border transition',
           ready
-            ? 'border-white/10 bg-white/[0.06] text-mist-100 group-hover:bg-white/10'
-            : 'border-white/[0.05] bg-white/[0.03] text-ash-500',
+            ? 'border-black/10 bg-mist-100 text-graphite-900 group-hover:bg-mist-200'
+            : 'border-black/[0.06] bg-black/[0.03] text-ash-500',
         ].join(' ')}
       >
         <span className="[&>svg]:h-7 [&>svg]:w-7">{icon}</span>
@@ -54,18 +54,18 @@ export function ModuleCard({
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <h3 className={['font-display text-lg font-bold leading-tight', ready ? 'text-mist-100' : 'text-ash-400'].join(' ')}>{label}</h3>
-          {!ready && <span className="label rounded-full border border-white/10 px-2 py-0.5 text-[9px] text-ash-500">soon</span>}
+          {!ready && <span className="label rounded-full border border-black/10 px-2 py-0.5 text-[9px] text-ash-500">soon</span>}
         </div>
         <p className="mt-0.5 truncate text-sm text-ash-400">{desc}</p>
       </div>
 
-      <ChevronRight className={['h-5 w-5 shrink-0 transition', ready ? 'text-mist-300 group-hover:translate-x-0.5' : 'text-ash-600'].join(' ')} />
+      <ChevronRight className={['h-5 w-5 shrink-0 transition', ready ? 'text-mist-300 group-hover:translate-x-0.5' : 'text-ash-500'].join(' ')} />
     </motion.div>
   );
 
   if (!ready) return <div aria-disabled>{body}</div>;
   return (
-    <Link href={href} className="block rounded-xl2 outline-none focus-visible:ring-2 focus-visible:ring-mist-300/50">
+    <Link href={href} className="block rounded-xl2 outline-none focus-visible:ring-2 focus-visible:ring-mist-300/40">
       {body}
     </Link>
   );

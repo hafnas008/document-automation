@@ -10,35 +10,37 @@ const config: Config = {
         mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
       colors: {
-        // Graphite → silver grayscale system
+        // Light grayscale system.
+        // graphite = light SURFACES (canvas / cards), mist = dark INK (text),
+        // ash = mid grays (muted text / hairlines).
         graphite: {
-          950: '#09090B',
-          900: '#0C0C0E', // app base
-          850: '#121214',
-          800: '#161619', // card
-          700: '#1E1E22',
-          600: '#26262B',
-          500: '#33333A',
+          950: '#E4E4E7',
+          900: '#ECECEE', // app canvas
+          850: '#F5F5F6',
+          800: '#FFFFFF', // card
+          700: '#F1F1F3', // hover
+          600: '#E8E8EB',
+          500: '#DCDCE0',
         },
         ash: {
-          600: '#56565E',
-          500: '#74747C',
-          400: '#9A9AA2', // muted text
-          300: '#B8B8BE',
+          600: '#C2C2C8', // faint hairline
+          500: '#9A9AA2', // faint text
+          400: '#6B6B72', // muted text
+          300: '#52525B',
         },
         mist: {
-          300: '#CFD0D4', // silver accent
-          200: '#E2E2E5',
-          100: '#F1F1F3', // primary text
+          300: '#52525B', // accent / icon stroke
+          200: '#33333A',
+          100: '#18181B', // primary text
         },
-        // legacy tokens — keep old (un-reskinned) costing/settings pages readable
+        // legacy tokens — keep old (un-reskinned) settings/onboarding pages readable
         ink: { 950: '#0a0a0a', 900: '#171717', 800: '#262626', 50: '#fafafa' },
       },
       letterSpacing: { ultra: '0.42em' },
       boxShadow: {
-        tile: '0 1px 2px rgba(0,0,0,0.4), 0 18px 50px -22px rgba(0,0,0,0.8)',
-        lift: '0 2px 6px rgba(0,0,0,0.5), 0 32px 70px -28px rgba(0,0,0,0.9)',
-        bar: '0 -1px 0 rgba(255,255,255,0.06), 0 -18px 40px -22px rgba(0,0,0,0.7)',
+        tile: '0 1px 2px rgba(24,24,27,0.04), 0 14px 36px -20px rgba(24,24,27,0.22)',
+        lift: '0 2px 6px rgba(24,24,27,0.06), 0 30px 64px -28px rgba(24,24,27,0.30)',
+        bar: '0 -1px 0 rgba(24,24,27,0.06), 0 -16px 40px -24px rgba(24,24,27,0.18)',
       },
       borderRadius: { xl2: '1.4rem' },
       keyframes: {
