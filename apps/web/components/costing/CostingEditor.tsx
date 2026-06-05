@@ -28,7 +28,6 @@ export default function CostingEditor({
   );
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [uploading, setUploading] = useState(false);
-  const [making, setMaking] = useState(false);
   const [busyRate, setBusyRate] = useState<string | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -101,18 +100,9 @@ export default function CostingEditor({
     } finally { setUploading(false); }
   }
 
-  async function makePdf() {
-    setMaking(true);
-    try {
-      const { generateCostingPdf } = await import('@/lib/pdf/costingPdf');
-      await generateCostingPdf({
-        sheetNumber: sheet.sheet_number, projectName: title, client, doneBy, date, size,
-        photoUrl: photoUrl ? `${photoUrl}?v=${date}` : null,
-        logoUrl: logoUrl || '/logo.png', companyName, currency: sheet.currency || 'QAR',
-        items: rows.map((r, i) => ({ number: i + 1, item: r.description, qty: r.qty, cost_unit: r.cost_unit, total_cost: r.qty * r.cost_unit, total_selling: 0 })).map(it => ({ ...it, total_selling: (it.total_cost) * (1 + markup / 100) })),
-        totals,
-      });
-    } finally { setMaking(false); }
+  function openPdf() {
+    // Open the A4 print template (vector, branded) in a new tab → Save/Print as PDF.
+    window.open(`/print/costing/${sheet.id}`, '_blank');
   }
 
   const inp = 'w-full bg-transparent outline-none text-mist-100 placeholder:text-ash-500';
@@ -235,7 +225,8 @@ export default function CostingEditor({
             </div>
             <SumRow label="Margin" value={`${totals.margin}%`} />
           </div>
-          <button onClick={makePdf} disabled={making} className="btn-primary mt-5 w-full">{making ? 'Generating…' : 'Generate PDF'}</button>
+          <button onClick={openPdf} className="btn-primary mt-5 w-full">Generate PDF</button>
+          <p className="mt-2 text-center text-[11px] text-ash-400">Opens the branded A4 template → Save as PDF.</p>
         </div>
       </div>
     </div>

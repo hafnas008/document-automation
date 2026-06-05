@@ -1,0 +1,33 @@
+/* A4 print document styling — independent of the app's screen theme. */
+.print-stage {
+  background: #d9d9dc;
+  min-height: 100vh;
+  padding: 24px 12px 80px;
+  display: flex;
+  justify-content: center;
+}
+.doc {
+  width: 210mm;
+  min-height: 297mm;
+  background: #ffffff;
+  color: #1a1a1a;
+  padding: 16mm 14mm 22mm;
+  position: relative;
+  box-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.45);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.35;
+}
+.doc * { box-sizing: border-box; }
+
+.print-bar { position: sticky; top: 0; z-index: 50; }
+
+@media print {
+  @page { size: A4; margin: 0; }
+  html, body { background: #fff !important; }
+  .print-stage { background: #fff; padding: 0; display: block; }
+  .no-print { display: none !important; }
+  .doc { box-shadow: none; margin: 0; width: 210mm; }
+  /* hide app chrome if any leaks in */
+  nav, .bottom-nav { display: none !important; }
+}
