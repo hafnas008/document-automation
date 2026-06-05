@@ -190,7 +190,7 @@ export default function CostingEditor({
             </div>
             <div className="mt-2 flex items-center gap-2">
               <button className="btn-ghost h-10 w-10 p-0 text-lg" onClick={() => setMk(Math.max(0, markup - 5))}>−</button>
-              <div className="flex flex-1 items-center rounded-xl border border-black/10 bg-black/[0.03] px-3">
+              <div className="flex flex-1 items-center rounded-xl border border-black/15 bg-graphite-900 px-3">
                 <input type="number" className="w-full bg-transparent py-2.5 num text-lg font-semibold text-mist-100 outline-none" value={markup} onChange={e => setMk(Number(e.target.value) || 0)} />
                 <span className="text-mist-300">%</span>
               </div>
@@ -212,7 +212,7 @@ export default function CostingEditor({
             <div className="rule my-1" />
             <div className="flex items-center justify-between">
               <span className="flex-1 text-mist-200">Profit</span>
-              <input type="number" className="w-28 rounded-lg border border-black/10 bg-black/[0.03] px-2 py-1 text-right num text-xs outline-none" value={totals.profit} onChange={e => onProfit(Number(e.target.value) || 0)} />
+              <input type="number" className="w-28 rounded-lg border border-black/15 bg-graphite-900 px-2 py-1.5 text-right num text-xs outline-none focus:bg-white" value={totals.profit} onChange={e => onProfit(Number(e.target.value) || 0)} />
             </div>
             <SumRow label="Margin" value={`${totals.margin}%`} />
           </div>
@@ -225,10 +225,12 @@ export default function CostingEditor({
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <label className="block rounded-xl border border-black/[0.07] bg-black/[0.02] px-3 py-2">
+    <div>
       <span className="label text-[9px]">{label}</span>
-      <div className="mt-0.5">{children}</div>
-    </label>
+      <div className="mt-1.5 flex items-center rounded-xl border border-black/15 bg-graphite-900 px-3 py-2.5 transition focus-within:border-mist-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-mist-300/15">
+        {children}
+      </div>
+    </div>
   );
 }
 function SumRow({ label, value }: { label: string; value: string }) {
