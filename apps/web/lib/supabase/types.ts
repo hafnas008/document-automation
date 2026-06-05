@@ -27,6 +27,15 @@ export interface DbCostingSheet {
   profit_pct: number;
   contingency_pct: number;
   vat_pct: number;
+  // Markup model (Step #2)
+  client_name: string | null;
+  done_by: string | null;
+  doc_date: string | null;
+  project_size: string | null;
+  markup_pct: number;
+  labour_cnc: number;
+  total_selling: number;
+  photo_url: string | null;
   subtotal: number;
   grand_total: number;
   pdf_url: string | null;

@@ -1,28 +1,27 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { supabaseServer } from '@/lib/supabase/server';
-import { computeTotals } from '@/lib/formulas';
+import { computeMarkupTotals, lineCost } from '@/lib/formulas';
 import { normalizeItemText } from '@/lib/normalize';
 import { audit } from '@/lib/audit';
 
 const ItemSchema = z.object({
   id: z.string().uuid(),
-  section: z.enum(['Material','Labour','Equipment','Transport','Other']),
   row_index: z.number().int(),
   description: z.string().default(''),
   qty: z.number(),
-  unit: z.string().nullable(),
-  unit_rate: z.number(),
-  labour_rate: z.number().nullable(),
-  rate_source: z.enum(['manual','suggested','history']).default('manual'),
+  cost_unit: z.number(),
 });
 
 const Body = z.object({
-  title: z.string().min(1).max(200),
-  overhead_pct: z.number(),
-  profit_pct: z.number(),
-  contingency_pct: z.number(),
-  vat_pct: z.number(),
+  title: z.string().max(400).default('Untitled costing'),
+  client_name: z.string().nullable().optional(),
+  done_by: z.string().nullable().optional(),
+  doc_date: z.string().nullable().optional(),
+  project_size: z.string().nullable().optional(),
+  markup_pct: z.number(),
+  labour_cnc: z.number(),
+  photo_url: z.string().nullable().optional(),
   items: z.array(ItemSchema),
 });
 
@@ -35,54 +34,53 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   if (!parsed.success) return NextResponse.json({ error: 'bad input', details: parsed.error.flatten() }, { status: 400 });
   const body = parsed.data;
 
-  // Reject edits to finalized sheets
-  const { data: sheet } = await supa.from('costing_sheets').select('id, status').eq('id', params.id).single();
+  const { data: sheet } = await supa.from('costing_sheets').select('id, status, tenant_id').eq('id', params.id).single();
   if (!sheet) return NextResponse.json({ error: 'not found' }, { status: 404 });
   if (sheet.status === 'final') return NextResponse.json({ error: 'sheet is finalized; duplicate to edit' }, { status: 409 });
 
-  const totals = computeTotals({
-    items: body.items.map(i => ({ section: i.section, qty: i.qty, unit_rate: i.unit_rate, labour_rate: i.labour_rate })),
-    overhead_pct: body.overhead_pct, profit_pct: body.profit_pct,
-    contingency_pct: body.contingency_pct, vat_pct: body.vat_pct,
-  });
+  const totals = computeMarkupTotals(
+    body.items.map(i => ({ qty: i.qty, cost_unit: i.cost_unit })),
+    body.labour_cnc,
+    body.markup_pct,
+  );
 
   const { error: sErr } = await supa.from('costing_sheets').update({
-    title: body.title,
-    overhead_pct: body.overhead_pct,
-    profit_pct: body.profit_pct,
-    contingency_pct: body.contingency_pct,
-    vat_pct: body.vat_pct,
-    subtotal: totals.subtotal,
-    grand_total: totals.grand_total,
+    title: body.title || 'Untitled costing',
+    client_name: body.client_name ?? null,
+    done_by: body.done_by ?? null,
+    doc_date: body.doc_date || null,
+    project_size: body.project_size ?? null,
+    markup_pct: body.markup_pct,
+    labour_cnc: body.labour_cnc,
+    photo_url: body.photo_url ?? null,
+    subtotal: totals.items_cost,
+    grand_total: totals.total_cost,
+    total_selling: totals.total_selling,
   }).eq('id', params.id);
   if (sErr) return NextResponse.json({ error: sErr.message }, { status: 500 });
 
   for (const it of body.items) {
-    const effRate = it.section === 'Labour' && it.labour_rate != null ? it.unit_rate + it.labour_rate : it.unit_rate;
-    const total = Math.round(it.qty * effRate * 100) / 100;
     const { error } = await supa.from('costing_items').update({
-      section: it.section,
       row_index: it.row_index,
       description: it.description,
       item_text_normalized: normalizeItemText(it.description),
-      qty: it.qty, unit: it.unit,
-      unit_rate: it.unit_rate, labour_rate: it.labour_rate,
-      rate_source: it.rate_source,
-      total,
+      qty: it.qty,
+      unit_rate: it.cost_unit,
+      total: lineCost(it.qty, it.cost_unit),
     }).eq('id', it.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Get tenant_id for the audit log
-  const tenantId = (await supa.from('costing_sheets').select('tenant_id').eq('id', params.id).single()).data?.tenant_id;
-  if (tenantId) {
-    await audit(supa, {
-      tenant_id: tenantId, user_id: user.id,
-      action: 'update', entity_type: 'costing_sheet',
-      entity_id: params.id,
-      diff: { title: body.title, items_count: body.items.length },
-    });
-  }
+  // Reconcile deletions: drop any items no longer in the payload.
+  const keepIds = body.items.map(i => i.id);
+  const del = supa.from('costing_items').delete().eq('sheet_id', params.id);
+  await (keepIds.length ? del.not('id', 'in', `(${keepIds.join(',')})`) : del);
+
+  await audit(supa, {
+    tenant_id: sheet.tenant_id, user_id: user.id,
+    action: 'update', entity_type: 'costing_sheet', entity_id: params.id,
+    diff: { title: body.title, items_count: body.items.length },
+  });
 
   return NextResponse.json({ ok: true, totals });
 }

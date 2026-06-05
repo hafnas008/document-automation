@@ -28,6 +28,41 @@ export interface CostingTotalsOutput {
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
+/* ── Markup model (Step #2 — Hafnas's real costing logic) ──────────────
+   total_cost    = qty × cost_unit (per item)
+   cost_base     = Σ item costs + labour_cnc
+   total_selling = cost_base × (1 + markup/100)
+   profit        = selling − cost ; margin = profit / selling × 100
+   Reverse:  margin% M → markup = M/(100−M)×100 ; profit P → markup = P/cost×100 */
+export interface MarkupItem { qty: number; cost_unit: number; }
+export interface MarkupTotals {
+  items_cost: number; labour_cnc: number; total_cost: number;
+  total_selling: number; profit: number; margin: number;
+}
+export function lineCost(qty: number, costUnit: number): number {
+  return round2((Number(qty) || 0) * (Number(costUnit) || 0));
+}
+export function computeMarkupTotals(items: MarkupItem[], labourCnc: number, markupPct: number): MarkupTotals {
+  const items_cost = round2(items.reduce((s, i) => s + lineCost(i.qty, i.cost_unit), 0));
+  const labour_cnc = round2(Number(labourCnc) || 0);
+  const total_cost = round2(items_cost + labour_cnc);
+  const total_selling = round2(total_cost * (1 + (Number(markupPct) || 0) / 100));
+  const profit = round2(total_selling - total_cost);
+  const margin = total_selling > 0 ? round2((profit / total_selling) * 100) : 0;
+  return { items_cost, labour_cnc, total_cost, total_selling, profit, margin };
+}
+/** margin % → markup % (avoids /0 at 100%). */
+export function marginToMarkup(marginPct: number): number {
+  const M = Number(marginPct) || 0;
+  if (M >= 100) return 0;
+  return round2((M / (100 - M)) * 100);
+}
+/** target profit amount → markup % given total cost. */
+export function profitToMarkup(profit: number, totalCost: number): number {
+  if (!totalCost) return 0;
+  return round2(((Number(profit) || 0) / totalCost) * 100);
+}
+
 export function itemTotal(row: CostingItemRow): number {
   const effectiveRate = row.section === 'Labour' && row.labour_rate != null
     ? row.unit_rate + row.labour_rate

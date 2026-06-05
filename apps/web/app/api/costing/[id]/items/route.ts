@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { supabaseServer } from '@/lib/supabase/server';
 
-const Body = z.object({ section: z.enum(['Material','Labour','Equipment','Transport','Other']) });
+const Body = z.object({ section: z.enum(['Material','Labour','Equipment','Transport','Other']).default('Material') }).default({ section: 'Material' });
 
 export async function POST(req: Request, { params }: { params: { id: string } }) {
   const supa = supabaseServer();
