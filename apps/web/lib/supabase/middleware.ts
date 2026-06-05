@@ -45,8 +45,9 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // If on the costing pages but tenant lacks branding minimum → /settings/branding
-    if (!path.startsWith('/settings') && path !== '/onboarding') {
+    // Branding is only required to actually generate a document (costing flow).
+    // Home + other module pages stay reachable regardless.
+    if (path.startsWith('/costing')) {
       const { data: tenant } = await supa
         .from('tenants')
         .select('company_name, logo_url, trn_number')

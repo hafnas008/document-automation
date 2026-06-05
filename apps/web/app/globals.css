@@ -2,5 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
-body { @apply bg-ink-50 text-ink-900 antialiased; }
+:root {
+  color-scheme: light;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+body {
+  @apply bg-beige-200 text-brown-900 antialiased;
+  font-feature-settings: 'ss01', 'cv01';
+}
+
+/* Thin "blueprint" ruled hairline */
+.rule {
+  @apply border-t border-beige-400/70;
+}
+
+/* Engineering numeric readout */
+.num {
+  @apply font-mono tabular-nums;
+}
+
+/* Modern primary button */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-brown-600 px-5 py-3
+         font-medium text-beige-50 shadow-tile transition active:scale-[0.98]
+         hover:bg-brown-700 disabled:opacity-50;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-2xl border border-beige-400
+         bg-beige-50 px-5 py-3 font-medium text-brown-800 transition active:scale-[0.98]
+         hover:bg-beige-100;
+}
+
+/* App card surface */
+.card {
+  @apply rounded-2xl border border-beige-400/70 bg-beige-50 shadow-tile;
+}

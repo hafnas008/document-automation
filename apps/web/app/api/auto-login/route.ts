@@ -27,5 +27,5 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect(new URL('/costing', request.url));
+  return NextResponse.redirect(new URL('/home', request.url));
 }
