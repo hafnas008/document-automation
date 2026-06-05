@@ -1,6 +1,9 @@
 import { supabaseServer } from '@/lib/supabase/server';
+import { GreetingHeader } from '@/components/shell/GreetingHeader';
+import { DateStrip } from '@/components/shell/DateStrip';
 import { SmartCommand } from '@/components/shell/SmartCommand';
 import { ModuleCard } from '@/components/shell/ModuleCard';
+import { Fab } from '@/components/shell/Fab';
 import { CostingIcon, QuotationIcon, InvoiceIcon } from '@/components/shell/icons';
 
 export const dynamic = 'force-dynamic';
@@ -9,7 +12,7 @@ export default async function HomePage() {
   const supa = supabaseServer();
   const { data: { user } } = await supa.auth.getUser();
 
-  let company = 'Documentation Studio';
+  let company = 'there';
   if (user) {
     const { data: m } = await supa
       .from('tenant_users').select('tenant_id').eq('user_id', user.id).maybeSingle();
@@ -21,27 +24,18 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="pt-6">
-      {/* status bar */}
-      <div className="mb-2 flex items-center justify-between px-5">
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-breathe rounded-full bg-mist-300" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-mist-200" />
-          </span>
-          <span className="label text-ash-400">System online</span>
-        </div>
-        <span className="label text-ash-500">{company}</span>
+    <div className="pb-4">
+      <GreetingHeader company={company} />
+      <DateStrip />
+
+      <div className="mt-6">
+        <SmartCommand />
       </div>
 
-      {/* smart command hero */}
-      <SmartCommand />
-
-      {/* module menu */}
       <section className="mt-7 px-4">
         <div className="mb-3 flex items-end justify-between px-1">
-          <h2 className="label text-ash-400">Documents</h2>
-          <span className="label text-ash-500">03 modules</span>
+          <h2 className="label">Documents</h2>
+          <span className="label">03 modules</span>
         </div>
         <div className="flex flex-col gap-3">
           <ModuleCard index={0} href="/costing" label="Costing" desc="Estimate from a photo, voice note or sheet" icon={<CostingIcon />} status="ready" />
@@ -49,6 +43,8 @@ export default async function HomePage() {
           <ModuleCard index={2} href="/invoice" label="Invoice" desc="Bill from an approved quotation" icon={<InvoiceIcon />} status="soon" />
         </div>
       </section>
+
+      <Fab href="/costing" />
     </div>
   );
 }
