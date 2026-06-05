@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: 'Documentation Studio',
   description: 'A smart documentation assistant for engineering & contracting companies',
   manifest: '/manifest.webmanifest',
-  icons: { icon: '/icon.svg', apple: '/icon.svg' },
+  icons: { icon: '/logo.png', apple: '/logo.png' },
   appleWebApp: { capable: true, statusBarStyle: 'default', title: 'Documentation' },
 };
 
