@@ -7,7 +7,7 @@ import { suggestRate, type RateEvidence } from '@/lib/claude';
 
 const Body = z.object({
   description: z.string().min(1),
-  unit: z.string().min(1),
+  unit: z.string().optional().default('unit'),
 });
 
 export async function POST(req: Request, { params }: { params: { id: string } }) {
