@@ -26,8 +26,9 @@ export async function updateSession(request: NextRequest) {
   const isApi = path.startsWith('/api/');
   const isPublic = isAuthPage || path === '/' || path.startsWith('/_next') || path.startsWith('/favicon');
 
+  // Easy-access mode: no login screen — bounce anonymous hits to auto-login.
   if (!user && !isPublic && !isApi) {
-    url.pathname = '/login';
+    url.pathname = '/api/auto-login';
     return NextResponse.redirect(url);
   }
 

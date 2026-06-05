@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supa = supabaseServer();
   const { data: { user } } = await supa.auth.getUser();
-  if (!user) redirect('/login');
+  if (!user) redirect('/api/auto-login');
   return (
     <div className="min-h-screen">
       <nav className="border-b bg-white px-6 py-3 flex justify-between items-center">
