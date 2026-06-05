@@ -94,6 +94,28 @@ export const SettingsIcon = (p: P) => (
   </svg>
 );
 
+/* ── Smart-command icons ───────────────────────────────────────────── */
+
+export const PencilIcon = (p: P) => (
+  <svg {...base} {...p}><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg>
+);
+
+export const MicIcon = (p: P) => (
+  <svg {...base} {...p}><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0" /><path d="M12 18v3" /></svg>
+);
+
+export const CameraIcon = (p: P) => (
+  <svg {...base} {...p}><path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L19 6h0a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><circle cx="12" cy="12.5" r="3.2" /></svg>
+);
+
+export const SparkIcon = (p: P) => (
+  <svg {...base} {...p}><path d="M12 3v4M12 17v4M3 12h4M17 12h4" /><path d="M12 8.5 13.2 11l2.3.8-2.3.8L12 15l-1.2-2.4L8.5 11.8 10.8 11z" /></svg>
+);
+
+export const SendIcon = (p: P) => (
+  <svg {...base} {...p}><path d="M7 17 17 7M9 7h8v8" /></svg>
+);
+
 export const ChevronRight = (p: P) => (
   <svg {...base} {...p}><path d="m9 6 6 6-6 6" /></svg>
 );

@@ -1,6 +1,7 @@
 import { supabaseServer } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { BottomNav } from '@/components/shell/BottomNav';
+import { Atmosphere } from '@/components/shell/Atmosphere';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supa = supabaseServer();
@@ -8,8 +9,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (!user) redirect('/api/auto-login');
 
   return (
-    <div className="min-h-screen bg-beige-200">
-      <div className="mx-auto min-h-screen max-w-xl bg-beige-200 pb-24">
+    <div className="relative min-h-screen">
+      <Atmosphere />
+      <div className="mx-auto min-h-screen max-w-xl pb-28">
         {children}
       </div>
       <BottomNav />

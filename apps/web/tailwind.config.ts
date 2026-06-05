@@ -5,41 +5,54 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui'],
-        display: ['var(--font-display)', 'var(--font-inter)', 'ui-sans-serif'],
+        sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui'],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
         mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
       colors: {
-        // Light beige + brown "professional engineering" palette
+        // Warm beige + brown "intelligent studio" palette
         beige: {
-          50: '#FBF7EF', // cream surface
+          50: '#FCF8F0',
           100: '#F6EFE1',
-          200: '#F2EADB', // app canvas
-          300: '#E8DCC6',
+          200: '#F0E6D3', // canvas
+          300: '#E6D8BE',
           400: '#D8C7A8', // sand hairline
         },
         brown: {
-          400: '#8A6A4F',
-          500: '#6F503A',
-          600: '#5C4433', // primary
-          700: '#4A3527', // primary hover
-          800: '#3A291E',
-          900: '#2E2620', // espresso text
+          400: '#977654',
+          500: '#735639',
+          600: '#5C4433',
+          700: '#473226',
+          800: '#36251B',
+          900: '#251913', // near-espresso
         },
         caramel: {
+          300: '#D7A877',
           400: '#C08A5E',
           500: '#A9744F', // accent
           600: '#8E5E3E',
         },
-        // legacy aliases so existing pages don't break before reskin
-        ink: { 950: '#2E2620', 900: '#2E2620', 800: '#4A3527', 50: '#FBF7EF' },
       },
       boxShadow: {
-        tile: '0 1px 2px rgba(46,38,32,0.06), 0 8px 24px -12px rgba(46,38,32,0.18)',
-        bar: '0 -1px 0 rgba(216,199,168,0.7), 0 -8px 24px -16px rgba(46,38,32,0.25)',
+        tile: '0 1px 2px rgba(37,25,19,0.05), 0 14px 40px -18px rgba(37,25,19,0.30)',
+        lift: '0 2px 4px rgba(37,25,19,0.06), 0 26px 60px -24px rgba(37,25,19,0.45)',
+        bar: '0 -1px 0 rgba(216,199,168,0.6), 0 -16px 40px -22px rgba(37,25,19,0.4)',
+        glow: '0 0 0 1px rgba(169,116,79,0.30), 0 18px 50px -16px rgba(169,116,79,0.45)',
       },
-      borderRadius: {
-        xl2: '1.25rem',
+      borderRadius: { xl2: '1.4rem' },
+      keyframes: {
+        breathe: {
+          '0%,100%': { opacity: '0.55', transform: 'scale(1)' },
+          '50%': { opacity: '1', transform: 'scale(1.35)' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+      },
+      animation: {
+        breathe: 'breathe 2.4s ease-in-out infinite',
+        shimmer: 'shimmer 6s linear infinite',
       },
     },
   },
